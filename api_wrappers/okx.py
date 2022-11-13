@@ -1,3 +1,4 @@
+# type: ignore
 import base64
 import hmac
 import os
@@ -14,10 +15,12 @@ class OkxClientBase:
     """
 
     _rest_domain = 'https://www.okx.com'
+    _demo_header = {'x-simulated-trading': '1'}
+    _demo_mode: bool # Set through DEMO_MODE env variable to work in the demo network
 
     logger = get_logger()
 
-    def __init__(self, *arsgs, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.__access_key = os.environ['API_KEY']
         self.__api_passphrase = os.environ['API_PASSPHRASE']
         self.__api_secret = os.environ['API_SECRET_KEY']
@@ -36,14 +39,25 @@ class OkxClientBase:
             'OK-ACCESS-PASSPHRASE': self.__api_passphrase,
         }
 
-    def execute_request(self, url, method, authorization: bool, body: t.Any = {}, headers: t.Dict[str, str] = {}):
+    def execute_request(
+        self,
+        url,
+        method,
+        demo: bool = False,
+        authorization: bool = False,
+        body: t.Any = {},
+        headers: t.Dict[str, str] = {},
+    ):
         request_params = {
             'method': method,
             'url': f'{self._rest_domain}{url}',
+            'headers': {},
         }
         if authorization:
-            request_params['headers'] = headers.update(self._get_private_request_headers(method, url))
-        request_params['headers'] = headers
+            request_params['headers'].update(self._get_private_request_headers(method, url))
+        if self._demo_mode:
+            request_params['headers'].update(self._demo_header)
+        request_params['headers'].update(headers)
         try:
             response = requests.request(**request_params)
         except Exception as e:
@@ -57,9 +71,14 @@ class OkxClient(OkxClientBase):
     Use this class when make request to OKX.
     """
 
-    def get_account_balance(self):
+    def __init__(self, *args, **kwargs):
+        self._demo_mode = bool(os.environ['DEMO_MODE'])
+        super().__init__(*args, **kwargs)
+
+
+    def get_account_balance(self, demo: bool = False):
         url = '/api/v5/account/balance'
         method = 'GET'
-        resp = self.execute_request(url, method, authorization=True)
+        resp = self.execute_request(url, method, authorization=True, demo=demo)
         return resp
 

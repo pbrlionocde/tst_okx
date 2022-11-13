@@ -13,3 +13,20 @@ Traceback (most recent call last):
   File "/usr/lib/python3.10/site-packages/requests/models.py", line 439, in prepare_url
     raise MissingSchema(
 requests.exceptions.MissingSchema: Invalid URL '/api/v5/account/balance': No scheme supplied. Perhaps you meant http:///api/v5/account/balance?
+2022-11-13 18:07:35,857 - error_logger - ERROR - error
+Traceback (most recent call last):
+  File "/home/pbrlionocde/projects/home/tst_okx/api_wrappers/okx.py", line 62, in execute_request
+    response = requests.request(**request_params)
+  File "/usr/lib/python3.10/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3.10/site-packages/requests/sessions.py", line 573, in request
+    prep = self.prepare_request(req)
+  File "/usr/lib/python3.10/site-packages/requests/sessions.py", line 484, in prepare_request
+    p.prepare(
+  File "/usr/lib/python3.10/site-packages/requests/models.py", line 369, in prepare
+    self.prepare_headers(headers)
+  File "/usr/lib/python3.10/site-packages/requests/models.py", line 491, in prepare_headers
+    check_header_validity(header)
+  File "/usr/lib/python3.10/site-packages/requests/utils.py", line 1037, in check_header_validity
+    raise InvalidHeader(
+requests.exceptions.InvalidHeader: Header part (1) from {'x-simulated-trading': 1} must be of type str or bytes, not <class 'int'>
