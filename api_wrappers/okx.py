@@ -1,4 +1,4 @@
-import hashlib
+import base64
 import hmac
 import os
 import typing as t
@@ -24,7 +24,8 @@ class OkxClientBase:
 
     def __get_signature(self, timestamp: str, method: str, request_path: str):
         creds = f'{timestamp}{method}{request_path}'
-        return hmac.new(bytes(self.__api_secret, 'utf8'), msg=bytes(creds, 'utf8'), digestmod='sha256').hexdigest().upper()
+        digest_mac = hmac.new(bytes(self.__api_secret, 'utf8'), msg=bytes(creds, 'utf8'), digestmod='sha256').digest()
+        return base64.b64encode(digest_mac)
 
     def _get_private_request_headers(self, method: str, request_path: str):
         timestamp = get_timestamp()
@@ -34,16 +35,6 @@ class OkxClientBase:
             'OK-ACCESS-TIMESTAMP': timestamp,
             'OK-ACCESS-PASSPHRASE': self.__api_passphrase,
         }
-
-    @classmethod
-    def test_preview(cls) -> bool:
-        instance = cls()
-        headers = instance._get_private_request_headers('GET', '/tst/')
-        import json
-        print(
-            json.dumps(headers, indent=4)
-        )
-        return True
 
     def execute_request(self, url, method, authorization: bool, body: t.Any = {}, headers: t.Dict[str, str] = {}):
         request_params = {
