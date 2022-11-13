@@ -1,10 +1,13 @@
 # type: ignore
 import base64
 import hmac
+import json
 import os
 import typing as t
 
 import requests
+
+from api_wrappers.custom_exceptions import JSONParseError
 from logger.logger_conf import get_logger
 from utilities.time import get_timestamp
 
@@ -65,6 +68,15 @@ class OkxClientBase:
             return
         return response
 
+    def parse_response(self, response) -> t.Dict:
+        try:
+            loaded = json.loads(response.content)
+        except TypeError:
+            self.logger.exception("This response can't be deserialized!")
+            raise JSONParseError()
+
+        return loaded
+
 
 class OkxClient(OkxClientBase):
     """
@@ -75,10 +87,8 @@ class OkxClient(OkxClientBase):
         self._demo_mode = bool(os.environ['DEMO_MODE'])
         super().__init__(*args, **kwargs)
 
-
     def get_account_balance(self, demo: bool = False):
         url = '/api/v5/account/balance'
         method = 'GET'
         resp = self.execute_request(url, method, authorization=True, demo=demo)
         return resp
-
