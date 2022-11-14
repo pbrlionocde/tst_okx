@@ -30,3 +30,41 @@ Traceback (most recent call last):
   File "/usr/lib/python3.10/site-packages/requests/utils.py", line 1037, in check_header_validity
     raise InvalidHeader(
 requests.exceptions.InvalidHeader: Header part (1) from {'x-simulated-trading': 1} must be of type str or bytes, not <class 'int'>
+2022-11-14 15:11:00,596 - error_logger - ERROR - error
+Traceback (most recent call last):
+  File "/home/user/projects/tst/tst_okx/api_wrappers/okx.py", line 63, in execute_request
+    response = requests.request(self.get_request_kwargs(
+  File "/home/user/projects/tst/tst_okx/api_wrappers/requests_utilities.py", line 25, in get_request_kwargs
+    request_params = self.__process_arguments()
+  File "/home/user/projects/tst/tst_okx/api_wrappers/requests_utilities.py", line 39, in __process_arguments
+    handler(request_params=request_params)
+  File "/home/user/projects/tst/tst_okx/api_wrappers/requests_utilities.py", line 45, in _url
+    request_params['url']=f'{self.domain}{self.kwargs["url"]}'
+AttributeError: 'OkxClient' object has no attribute 'domain'
+2022-11-14 15:11:30,536 - error_logger - ERROR - error
+Traceback (most recent call last):
+  File "/home/user/projects/tst/tst_okx/api_wrappers/okx.py", line 63, in execute_request
+    response = requests.request(self.get_request_kwargs(
+  File "/home/user/projects/tst/tst_okx/api_wrappers/requests_utilities.py", line 25, in get_request_kwargs
+    request_params = self.__process_arguments()
+  File "/home/user/projects/tst/tst_okx/api_wrappers/requests_utilities.py", line 39, in __process_arguments
+    handler(request_params=request_params)
+  File "/home/user/projects/tst/tst_okx/api_wrappers/requests_utilities.py", line 45, in _url
+    request_params['url']=f'{self.domain}{self.kwargs["url"]}'
+AttributeError: 'OkxClient' object has no attribute 'domain'
+2022-11-14 15:49:12,581 - error_logger - ERROR - error
+Traceback (most recent call last):
+  File "/home/user/projects/tst/tst_okx/api_wrappers/okx.py", line 63, in execute_request
+    response = requests.request(self.get_request_kwargs(
+  File "/home/user/projects/tst/tst_okx/api_wrappers/requests_utilities.py", line 25, in get_request_kwargs
+    request_params = self.__process_arguments()
+  File "/home/user/projects/tst/tst_okx/api_wrappers/requests_utilities.py", line 39, in __process_arguments
+    handler(request_params=request_params)
+  File "/home/user/projects/tst/tst_okx/api_wrappers/requests_utilities.py", line 45, in _url
+    request_params['url']=f'{self.domain}{self.kwargs["url"]}'
+AttributeError: 'OkxClient' object has no attribute 'domain'
+2022-11-14 15:57:21,450 - error_logger - ERROR - error
+Traceback (most recent call last):
+  File "/home/user/projects/tst/tst_okx/api_wrappers/okx.py", line 72, in execute_request
+    response = requests.request(request_params)
+TypeError: request() missing 1 required positional argument: 'url'

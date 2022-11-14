@@ -8,29 +8,29 @@ import typing as t
 import requests
 
 from api_wrappers.custom_exceptions import JSONParseError
+from api_wrappers.requests_utilities import SetupAPIKwargs
 from logger.logger_conf import get_logger
 from utilities.time import get_timestamp
 
 
-class OkxClientBase:
+class OkxClientBase(SetupAPIKwargs):
     """
     Credentials to OKX API `trade_bot`
     """
 
     _rest_domain = 'https://www.okx.com'
     _demo_header = {'x-simulated-trading': '1'}
-    _demo_mode: bool # Set through DEMO_MODE env variable to work in the demo network
-
     logger = get_logger()
 
     def __init__(self, *args, **kwargs):
         self.__access_key = os.environ['API_KEY']
         self.__api_passphrase = os.environ['API_PASSPHRASE']
         self.__api_secret = os.environ['API_SECRET_KEY']
+        super().__init__(self._rest_domain)
 
     def __get_signature(self, timestamp: str, method: str, request_path: str):
-        creds = f'{timestamp}{method}{request_path}'
-        digest_mac = hmac.new(bytes(self.__api_secret, 'utf8'), msg=bytes(creds, 'utf8'), digestmod='sha256').digest()
+        msg = f'{timestamp}{method}{request_path}'
+        digest_mac = hmac.new(bytes(self.__api_secret, 'utf8'), msg=bytes(msg, 'utf8'), digestmod='sha256').digest()
         return base64.b64encode(digest_mac)
 
     def _get_private_request_headers(self, method: str, request_path: str):
@@ -46,24 +46,21 @@ class OkxClientBase:
         self,
         url,
         method,
-        demo: bool = False,
         authorization: bool = False,
         body: t.Any = {},
         headers: t.Dict[str, str] = {},
+        query: t.Dict[str, str] = {},
     ):
-        request_params = {
-            'method': method,
-            'url': f'{self._rest_domain}{url}',
-            'headers': {},
-        }
-        if authorization:
-            request_params['headers'].update(self._get_private_request_headers(method, url))
-        if self._demo_mode:
-            request_params['headers'].update(self._demo_header)
-        request_params['headers'].update(headers)
         try:
-            response = requests.request(**request_params)
-        except Exception as e:
+            response = requests.request(**self.get_request_kwargs(
+                url=url,
+                method=method,
+                authorization=authorization,
+                body=body,
+                headers=headers,
+                query=query,
+            ))
+        except Exception:
             self.logger.exception('error')
             return
         return response
@@ -87,8 +84,8 @@ class OkxClient(OkxClientBase):
         self._demo_mode = bool(os.environ['DEMO_MODE'])
         super().__init__(*args, **kwargs)
 
-    def get_account_balance(self, demo: bool = False):
+    def get_account_balance(self, symbol: str = 'BTC'):
         url = '/api/v5/account/balance'
         method = 'GET'
-        resp = self.execute_request(url, method, authorization=True, demo=demo)
+        resp = self.execute_request(url, method, authorization=True, query={'ccy': symbol})
         return resp
