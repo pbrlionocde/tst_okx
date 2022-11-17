@@ -7,5 +7,7 @@ if __name__ == '__main__':
     client = OkxClient()
 
     resp = client.get_account_balance()
-    t = client.parse_response(resp)
-    pprint(t)
+    # t = client.parse_response(resp)
+    resp
+    details = resp.data[0].details[0]
+    details
