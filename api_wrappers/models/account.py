@@ -58,18 +58,8 @@ class Balance:
         return None
 
 
-import_names = (
+__all__ = (
     'Balance',
     'BalanceData',
     'BalanceDataDetails',
 )
-
-
-def account_model_names() -> List[str]:
-    return import_names
-
-
-__all__ = [
-    *import_names,
-    'account_model_names',
-]

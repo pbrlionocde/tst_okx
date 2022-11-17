@@ -11,15 +11,18 @@ Import from this package should be as in the example below:
 Please read the documentation about using marshmallow Schema:
 https://marshmallow.readthedocs.io/en/stable/
 """
-
-from api_wrappers.models.account import *
 from typing import Type
-from marshmallow_dataclass import class_schema
+
 import marshmallow
+from marshmallow_dataclass import class_schema
+
+# import all modules before importing their models
+from api_wrappers.models import account
 
 IMPORT_MODEL_NAMES = [
-    *account_model_names()
+    *account.__all__,
 ]
+from api_wrappers.models.account import *
 
 
 class InitializeModels:
