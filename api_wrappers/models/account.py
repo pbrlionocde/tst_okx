@@ -58,9 +58,6 @@ class Balance:
         return None
 
 
-# a = class_schema(Balance)().load()
-
-
 import_names = (
     'Balance',
     'BalanceData',
