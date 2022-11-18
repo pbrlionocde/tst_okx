@@ -1,0 +1,40 @@
+
+"""
+Import from this package should be as in the example below:
+    from api_wrappers.models import InitializeModels
+
+    initializer = InitializeModels()
+    your_model_instance = initializer('YourModelName')
+
+!!! `your_model_instance` has all methods `marshmallow.Schema` !!!
+
+Please read the documentation about using marshmallow Schema:
+https://marshmallow.readthedocs.io/en/stable/
+"""
+from typing import Type, Final
+
+import marshmallow
+from marshmallow_dataclass import class_schema
+
+
+BASE_PATH: Final = 'api_wrappers.models.'
+
+
+class InitializeModels:
+    def __init__(self, import_model_names: str = [], module: str = ''):
+        self.import_model_names = import_model_names
+        self.module = module
+
+    def __call__(self, model_name: str,  module: str = '') -> Type[marshmallow.Schema]:
+        if self.import_model_names and model_name not in self.import_model_names:
+            raise ImportError(f'`{model_name}` does not exist in the models package or was restricted in initializer')
+        if not module:
+            assert self.module, 'You must specify a module when __init__ or __call__ method is called'
+            module = self.module
+        model_class = __import__(f'{BASE_PATH}{module}', fromlist=[model_name])
+        return class_schema(getattr(model_class, model_name))()
+
+
+__all__ = [
+    'InitializeModels',
+]

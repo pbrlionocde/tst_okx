@@ -6,11 +6,15 @@ import os
 import typing as t
 
 import requests
+from marshmallow import Schema
 
 from api_wrappers.custom_exceptions import JSONParseError
+from api_wrappers.models import InitializeModels
 from api_wrappers.requests_utilities import SetupAPIKwargs
 from logger.logger_conf import get_logger
 from utilities.time import get_timestamp
+
+initializer = InitializeModels(module='account')
 
 
 class OkxClientBase(SetupAPIKwargs):
@@ -69,10 +73,13 @@ class OkxClientBase(SetupAPIKwargs):
         try:
             loaded = json.loads(response.content)
         except TypeError:
-            self.logger.exception("This response can't be deserialized!")
+            self.logger.exception("This response can't be deserialized as json!")
             raise JSONParseError()
-
         return loaded
+
+    def load_data(self, response: t.Dict[str, t.Any], model: Schema):
+        parsed_data = self.parse_response(response)
+        return model.load(data=parsed_data)
 
 
 class OkxClient(OkxClientBase):
@@ -84,8 +91,11 @@ class OkxClient(OkxClientBase):
         self._demo_mode = bool(os.environ['DEMO_MODE'])
         super().__init__(*args, **kwargs)
 
-    def get_account_balance(self, symbol: str = 'BTC'):
+    def get_account_balance(self, symbol: str = 'BTC', load: bool = True):
         url = '/api/v5/account/balance'
         method = 'GET'
         resp = self.execute_request(url, method, authorization=True, query={'ccy': symbol})
+        if load:
+            balance_model = initializer('Balance')
+            return self.load_data(resp, balance_model)
         return resp
