@@ -14,7 +14,7 @@ from api_wrappers.requests_utilities import SetupAPIKwargs
 from logger.logger_conf import get_logger
 from utilities.time import get_timestamp
 
-initializer = InitializeModels()
+initializer = InitializeModels(module='account')
 
 
 class OkxClientBase(SetupAPIKwargs):
