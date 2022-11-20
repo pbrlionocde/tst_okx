@@ -7,6 +7,3 @@ def get_timestamp():
     str_utc_date_time = str_utc_date_time[0:-9]
     str_utc_date_time += 'Z'
     return str_utc_date_time
-
-
-print(get_timestamp())
