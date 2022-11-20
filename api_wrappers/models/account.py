@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
+
 from api_wrappers.models.metadata import Metadata
-from marshmallow_dataclass import class_schema
 
 
 # Balance
@@ -52,7 +52,7 @@ class BalanceData:
 class Balance:
     code: str
     msg: str
-    data: List[BalanceData]
+    data: List[BalanceData]  # noqa: WPS120 # real item name
 
     def test(self):
         return None

@@ -1,13 +1,10 @@
-from api_wrappers.okx import OkxClient
-from pprint import pprint
-
+from api_wrappers.clients.account import OkxAccountClient
 
 if __name__ == '__main__':
     # init instance of OKX client
-    client = OkxClient()
+    account = OkxAccountClient()
 
-    resp = client.get_account_balance()
-    # t = client.parse_response(resp)
+    resp = account.get_account_balance()
     resp
     details = resp.data[0].details[0]
     details
