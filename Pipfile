@@ -10,6 +10,15 @@ marshmallow-dataclass = "*"
 [dev-packages]
 isort = "*"
 flake8 = "*"
+pep8-naming = "*"
+flake8-bugbear = "*"
+flake8-builtins = "*"
+flake8-isort = "*"
+flake8-comprehensions = "*"
+flake8-bandit = "*"
+flake8-eradicate = "*"
+wemake-python-styleguide = "*"
+bandit = "*"
 
 [requires]
 python_version = "^3.8"
