@@ -8,13 +8,10 @@ import typing as t
 import requests
 from marshmallow import Schema
 
-from api_wrappers.custom_exceptions import JSONParseError
-from api_wrappers.models import InitializeModels
-from api_wrappers.requests_utilities import SetupAPIKwargs
+from api_wrappers.base.requests_utilities import SetupAPIKwargs
+from api_wrappers.utils.custom_exceptions import JSONParseError
 from logger.logger_conf import get_logger
 from utilities.time import get_timestamp
-
-initializer = InitializeModels(module='account')
 
 
 class OkxClientBase(SetupAPIKwargs):
@@ -51,9 +48,9 @@ class OkxClientBase(SetupAPIKwargs):
         url,
         method,
         authorization: bool = False,
-        body: t.Any = {},
-        headers: t.Dict[str, str] = {},
-        query: t.Dict[str, str] = {},
+        body: t.Any = dict(),   # noqa: C408, B006
+        headers: t.Dict[str, str] = dict(),   # noqa: C408, B006
+        query: t.Dict[str, str] = dict(),   # noqa: C408, B006
     ):
         try:
             response = requests.request(**self.get_request_kwargs(
@@ -80,22 +77,3 @@ class OkxClientBase(SetupAPIKwargs):
     def load_data(self, response: t.Dict[str, t.Any], model: Schema):
         parsed_data = self.parse_response(response)
         return model.load(data=parsed_data)
-
-
-class OkxClient(OkxClientBase):
-    """
-    Use this class when make request to OKX.
-    """
-
-    def __init__(self, *args, **kwargs):
-        self._demo_mode = bool(os.environ['DEMO_MODE'])
-        super().__init__(*args, **kwargs)
-
-    def get_account_balance(self, symbol: str = 'BTC', load: bool = True):
-        url = '/api/v5/account/balance'
-        method = 'GET'
-        resp = self.execute_request(url, method, authorization=True, query={'ccy': symbol})
-        if load:
-            balance_model = initializer('Balance')
-            return self.load_data(resp, balance_model)
-        return resp

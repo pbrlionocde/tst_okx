@@ -1,19 +1,8 @@
-import typing as t
+from api_wrappers.utils.query import join_query
 
 
-def join_query(query_params: t.Dict[str, str]) -> str:
-    return '?' + '&'.join([f'{key}={value}' for key, value in query_params.items()])
-
-
-class MetaChecker:      # TODO: Add checks to an existing method
-    def __new__(cls, name, bases, dct):
-        inst = type(name, bases, dct)
-        # assert getattr(inst, '_get_private_request_headers', None) is not None, 'Use only for inheritance'
-        return inst
-
-
-class SetupAPIKwargs(metaclass=MetaChecker):
-    _demo_mode: bool # Set through DEMO_MODE env variable to work in the demo network
+class SetupAPIKwargs():
+    _demo_mode: bool  # Set through DEMO_MODE env variable to work in the demo network
     __kwargs_keys = (
         '_method',
         '_url',
@@ -22,6 +11,9 @@ class SetupAPIKwargs(metaclass=MetaChecker):
         '_body',
         '_headers',
     )
+
+    def _get_private_request_headers(self, method: str, request_path: str):
+        raise NotImplementedError()
 
     def __init__(self, domain):
         self.domain = domain
@@ -38,8 +30,8 @@ class SetupAPIKwargs(metaclass=MetaChecker):
         request_params = {
             'url': '',
             'method': '',
-            'headers': dict(),
-            'data': dict(),
+            'headers': {},  # must be as function call here for forgetting all data
+            'data': {},  # must be as function call here for forgetting all data
         }
         for key in self.__kwargs_keys:
             getattr(self, key)(request_params=request_params)
@@ -49,7 +41,7 @@ class SetupAPIKwargs(metaclass=MetaChecker):
         request_params['method'] = self.kwargs['method'].upper()
 
     def _url(self, request_params):
-        request_params['url']=f'{self.domain}{self.kwargs["url"]}'
+        request_params['url'] = f'{self.domain}{self.kwargs["url"]}'
 
     def _authorization(self, request_params):
         request_path = self.kwargs['url']
@@ -67,7 +59,7 @@ class SetupAPIKwargs(metaclass=MetaChecker):
             request_params['url'] += join_query(query_params)
 
     def _body(self, request_params):
-        request_params['data'] = self.kwargs.get('body', dict())
+        request_params['data'] = self.kwargs.get('body', {})
 
     def _headers(self, request_params):
-        request_params['headers'].update(self.kwargs.get('headers', dict))
+        request_params['headers'].update(self.kwargs.get('headers', {}))
