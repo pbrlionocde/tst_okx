@@ -2,6 +2,7 @@ from api_wrappers.clients.account import OkxAccountClient
 from api_wrappers.clients.market import OkxMarketClient
 from api_wrappers.clients.public_data import OkxPublicDataClient
 
+
 if __name__ == '__main__':
     # init instance of OKX client
     account = OkxAccountClient()

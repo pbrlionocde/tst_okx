@@ -20,3 +20,4 @@ class MarketPrice:
 __all__ = (
     'MarketPrice',
 )
+
