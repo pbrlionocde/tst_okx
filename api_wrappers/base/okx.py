@@ -76,4 +76,4 @@ class OkxClientBase(SetupAPIKwargs):
 
     def load_data(self, response: t.Dict[str, t.Any], model: Schema):
         parsed_data = self.parse_response(response)
-        return model.load(data=parsed_data)
+        return model.load(data=parsed_data['data'], many=True)
