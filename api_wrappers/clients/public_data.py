@@ -20,6 +20,6 @@ class OkxPublicDataClient(OkxClientBase):
         method = 'GET'
         resp = self.execute_request(url, method, authorization=True, query={'instType': inst_type})
         if load:
-            instrument_model = initializer('InstrumentPublicData')
+            instrument_model = initializer('PublicDataInstrument')
             return self.load_data(resp['data'], instrument_model, many=True)
         return resp

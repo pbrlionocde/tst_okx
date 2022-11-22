@@ -1,12 +1,10 @@
 from dataclasses import dataclass, field
-from typing import List
 
-from api_wrappers.models.metadata import Metadata
+from api_wrappers.models.common.metadata import Metadata
 
 
-# Balance
 @dataclass
-class InstrumentPublicData:
+class PublicDataInstrument:
     alias: str
     base_ccy: str = field(metadata=Metadata(data_key='baseCcy',))
     category: str
@@ -35,3 +33,8 @@ class InstrumentPublicData:
     stk: str
     tickSz: str = field(metadata=Metadata(data_key='tickSz'))
     uly: str
+
+
+__all__ = (
+    'PublicDataInstrument',
+)

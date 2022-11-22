@@ -10,7 +10,7 @@ if __name__ == '__main__':
     balance
     details = balance.data[0].details[0]
     print('Balance', details.ccy, ':', details.avail_eq)
-    
+
     resp = market.get_market_price(load=True)
     print(resp.mark_px)
 
