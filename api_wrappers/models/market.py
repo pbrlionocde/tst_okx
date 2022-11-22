@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from marshmallow import pre_load
 
-from api_wrappers.models.metadata import Metadata
+from api_wrappers.models.common.metadata import Metadata
 
 
 @dataclass
@@ -15,3 +15,9 @@ class MarketPrice:
     @pre_load
     def load_from_list(self, data, many, **kwargs):
         return data['data'][0]
+
+
+__all__ = (
+    'MarketPrice',
+)
+

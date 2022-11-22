@@ -83,5 +83,5 @@ class OkxClientBase(SetupAPIKwargs):
             raise custom_exceptions.JSONParseError()
         return loaded
 
-    def load_data(self, response: t.Dict[str, t.Any], model: Schema):
-        return model.load(data=response)
+    def load_data(self, response: t.Dict[str, t.Any], model: Schema, many: bool = False):
+        return model.load(data=response, many=many)

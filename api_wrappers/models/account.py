@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from api_wrappers.models.metadata import Metadata
+from api_wrappers.models.common.metadata import Metadata
 
 
 # Balance
@@ -49,14 +49,14 @@ class BalanceData:
 
 
 @dataclass
-class Balance:
+class AccountBalance:
     code: str
     msg: str
     data: List[BalanceData]  # noqa: WPS120 # real item name
 
 
 __all__ = (
-    'Balance',
+    'AccountBalance',
     'BalanceData',
     'BalanceDataDetails',
 )
