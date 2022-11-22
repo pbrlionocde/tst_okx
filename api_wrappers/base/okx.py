@@ -9,9 +9,14 @@ import requests
 from marshmallow import Schema
 
 from api_wrappers.base.requests_utilities import SetupAPIKwargs
-from api_wrappers.utils.custom_exceptions import JSONParseError
+from api_wrappers.utils import custom_exceptions
 from logger.logger_conf import get_logger
 from utilities.time import get_timestamp
+
+EXCEPTION_CODES: t.Final = {
+    '51001': custom_exceptions.InstrumentDoesNotExistError,
+    '51015': custom_exceptions.InstrumentDoesNotMatchError,
+}
 
 
 class OkxClientBase(SetupAPIKwargs):
@@ -63,17 +68,20 @@ class OkxClientBase(SetupAPIKwargs):
             ))
         except Exception:
             self.logger.exception('error')
-            return
-        return response
+            raise
+        else:
+            parsed_content = self.parse_response(response)
+            if exception := EXCEPTION_CODES.get(parsed_content['code']):
+                raise exception(url=url, inst_id=query['instId'])
+        return parsed_content
 
     def parse_response(self, response) -> t.Dict:
         try:
             loaded = json.loads(response.content)
         except TypeError:
             self.logger.exception("This response can't be deserialized as json!")
-            raise JSONParseError()
+            raise custom_exceptions.JSONParseError()
         return loaded
 
-    def load_data(self, response: t.Dict[str, t.Any], model: Schema):
-        parsed_data = self.parse_response(response)
-        return model.load(data=parsed_data)
+    def load_data(self, response: t.Dict[str, t.Any], model: Schema, many: bool = False):
+        return model.load(data=response, many=many)

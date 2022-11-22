@@ -20,6 +20,6 @@ class OkxAccountClient(OkxClientBase):
         method = 'GET'
         resp = self.execute_request(url, method, authorization=True, query={'ccy': symbol})
         if load:
-            balance_model = initializer('Balance')
+            balance_model = initializer('AccountBalance')
             return self.load_data(resp, balance_model)
         return resp
