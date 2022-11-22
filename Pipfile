@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 requests = "*"
 marshmallow-dataclass = "*"
+tradingview-ta = "*"
 
 [dev-packages]
 isort = "*"

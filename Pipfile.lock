@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "09dacc29a25666f155049035c81fea7af839e0b3e0c1e5c5f9024d015317c1fe"
+            "sha256": "5825ea8075f873f36441b0e837cfc6d278c37cad0b264ec119b5aaa58a859d0f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -86,6 +86,14 @@
             ],
             "index": "pypi",
             "version": "==2.28.1"
+        },
+        "tradingview-ta": {
+            "hashes": [
+                "sha256:1250068a44e253caeb2066bc1cd6e588f71796612d41d5d55d25083cf86b5531",
+                "sha256:f1a55351ed28554234106a28772f167e818d57f384d47f85b763bd143955c34a"
+            ],
+            "index": "pypi",
+            "version": "==3.3.0"
         },
         "typing-extensions": {
             "hashes": [
