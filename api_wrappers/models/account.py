@@ -54,9 +54,6 @@ class Balance:
     msg: str
     data: List[BalanceData]  # noqa: WPS120 # real item name
 
-    def test(self):
-        return None
-
 
 __all__ = (
     'Balance',
