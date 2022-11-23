@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from marshmallow import pre_load
 
-from api_wrappers.models.common.metadata import Metadata
+from src.api_wrappers.models.common.metadata import Metadata
 
 
 @dataclass

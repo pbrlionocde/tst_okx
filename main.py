@@ -1,6 +1,6 @@
-from api_wrappers.clients.account import OkxAccountClient
-from api_wrappers.clients.market import OkxMarketClient
-from api_wrappers.clients.public_data import OkxPublicDataClient
+from src.api_wrappers.clients.account import OkxAccountClient
+from src.api_wrappers.clients.market import OkxMarketClient
+from src.api_wrappers.clients.public_data import OkxPublicDataClient
 
 
 if __name__ == '__main__':

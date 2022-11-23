@@ -8,10 +8,10 @@ import typing as t
 import requests
 from marshmallow import Schema
 
-from api_wrappers.base.requests_utilities import SetupAPIKwargs
-from api_wrappers.utils import custom_exceptions
-from logger.logger_conf import get_logger
-from utilities.time import get_timestamp
+from src.logger.logger_conf import get_logger
+from src.api_wrappers.base.requests_utilities import SetupAPIKwargs
+from src.api_wrappers.utils import custom_exceptions
+from src.utilities.time import get_timestamp
 
 EXCEPTION_CODES: t.Final = {
     '51001': custom_exceptions.InstrumentDoesNotExistError,

@@ -1,4 +1,4 @@
-from api_wrappers.utils.query import join_query
+from src.api_wrappers.utils.query import join_query
 
 
 class SetupAPIKwargs():
