@@ -20,6 +20,7 @@ flake8-bandit = "*"
 flake8-eradicate = "*"
 wemake-python-styleguide = "*"
 bandit = "*"
+celery = "*"
 
 [requires]
 python_version = "^3.8"
