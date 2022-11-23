@@ -3,8 +3,8 @@ from time import sleep
 
 from tradingview_ta import Interval, TA_Handler
 
-from trading_view_wrapper.common.interval import Interval as WrappedInterval
-from trading_view_wrapper.exceptions import BrokenInterfaceAccessError
+from src.trading_view_wrapper.common.interval import Interval as WrappedInterval
+from src.trading_view_wrapper.exceptions import BrokenInterfaceAccessError
 
 
 class Analyzer(TA_Handler):

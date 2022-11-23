@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from api_wrappers.models.common.metadata import Metadata
+from src.api_wrappers.models.common.metadata import Metadata
 
 
 @dataclass

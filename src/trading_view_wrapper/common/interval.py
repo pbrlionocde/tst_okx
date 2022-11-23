@@ -2,7 +2,7 @@
 from typing import Final
 
 # from functools import cached_property TODO: Investigate `sleep_time`` working time
-from trading_view_wrapper.exceptions import AccessToInitializeError, InvalidIntervalValueError
+from src.trading_view_wrapper.exceptions import AccessToInitializeError, InvalidIntervalValueError
 
 INTERVALS: Final = {
     '1m': 60,

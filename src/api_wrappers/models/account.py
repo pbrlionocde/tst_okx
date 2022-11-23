@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from api_wrappers.models.common.metadata import Metadata
+from src.api_wrappers.models.common.metadata import Metadata
 
 
 # Balance

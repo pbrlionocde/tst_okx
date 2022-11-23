@@ -1,7 +1,7 @@
 import os
 
-from api_wrappers.base.okx import OkxClientBase
-from api_wrappers.models import InitializeModels
+from src.api_wrappers.base.okx import OkxClientBase
+from src.api_wrappers.models import InitializeModels
 
 initializer = InitializeModels(module='market')
 

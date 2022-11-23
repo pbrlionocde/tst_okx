@@ -1,7 +1,7 @@
 
 """
 Import from this package should be as in the example below:
-    from api_wrappers.models import InitializeModels
+    from src.api_wrappers.models import InitializeModels
 
     initializer = InitializeModels()
     your_model_instance = initializer('YourModelName')
@@ -16,7 +16,7 @@ from typing import Final, Type
 import marshmallow
 from marshmallow_dataclass import class_schema
 
-BASE_PATH: Final = 'api_wrappers.models.'
+BASE_PATH: Final = 'src.api_wrappers.models.'
 
 
 class InitializeModels:
