@@ -2,7 +2,7 @@ from src.api_wrappers.utils.query import join_query
 
 
 class SetupAPIKwargs():
-    _demo_mode: bool  # Set through DEMO_MODE env variable to work in the demo network
+    _demo_header = {'x-simulated-trading': '1'}
     __kwargs_keys = (
         '_method',
         '_url',
@@ -12,11 +12,10 @@ class SetupAPIKwargs():
         '_headers',
     )
 
-    def _get_private_request_headers(self, method: str, request_path: str):
-        raise NotImplementedError()
-
-    def __init__(self, domain):
+    def __init__(self, domain: str, authorization_headers_method: callable, demo: bool = False):
         self.domain = domain
+        self.authorization_headers_method = authorization_headers_method
+        self._demo_mode = demo
 
     def get_request_kwargs(self, **kwargs):
         """You must provide all arguments as keyword arguments"""
@@ -48,7 +47,7 @@ class SetupAPIKwargs():
         if query_params := self.kwargs.get('query'):
             request_path += join_query(query_params)
         request_params['headers'].update(
-            self._get_private_request_headers(
+            self.authorization_headers_method(
                 method=self.kwargs['method'],
                 request_path=request_path,
             ),
