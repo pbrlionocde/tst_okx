@@ -22,6 +22,7 @@ if __name__ == '__main__':
     print('Balance', details.ccy, ':', details.avail_eq)
 
     resp = market.get_market_price(inst_id=inst_id, load=True)
+    print(resp.dump())
     print(resp.mark_px)
 
 

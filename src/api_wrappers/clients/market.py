@@ -1,5 +1,3 @@
-import os
-
 from src.api_wrappers.base.okx import OkxClientBase
 from src.api_wrappers.models import InitializeModels
 
@@ -11,15 +9,11 @@ class OkxMarketClient(OkxClientBase):
     Use this class when make request to OKX.
     """
 
-    def __init__(self, *args, **kwargs):
-        self._demo_mode = bool(os.environ['DEMO_MODE'])
-        super().__init__(*args, **kwargs)
-
     def get_market_price(
         self,
+        inst_id: str,
         inst_type: str = 'FUTURES',
         uly: str = 'FUTURES',
-        inst_id: str = 'ETH-USD-221125',
         load: bool = False,
     ):
         url = '/api/v5/public/mark-price'

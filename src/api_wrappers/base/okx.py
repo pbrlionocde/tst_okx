@@ -6,9 +6,10 @@ import os
 import typing as t
 
 import requests
-from marshmallow import Schema
-from src.api_wrappers.exceptions.process_error_responses import ErrorProcessorMixin
+
 from src.api_wrappers.base.requests_utilities import SetupAPIKwargs
+from src.api_wrappers.exceptions.process_error_responses import ErrorProcessorMixin
+from src.api_wrappers.models.base.base_model import BaseModel
 from src.api_wrappers.utils import custom_exceptions
 from src.logger.logger_conf import get_logger
 from src.utilities.time import get_timestamp
@@ -24,14 +25,14 @@ class OkxClientBase(ErrorProcessorMixin):
     """
     Credentials to OKX API `trade_bot`
     """
-    _demo_mode: bool  # Set through DEMO_MODE env variable to work in the demo network
     _rest_domain = 'https://www.okx.com'
-    logger = get_logger()
 
     def __init__(self, *args, **kwargs):
         self.__access_key = os.environ['API_KEY']
         self.__api_passphrase = os.environ['API_PASSPHRASE']
         self.__api_secret = os.environ['API_SECRET_KEY']
+        self._demo_mode = bool(os.environ['DEMO_MODE'])
+        self.logger = get_logger()
 
     def __get_signature(self, timestamp: str, method: str, request_path: str):
         msg = f'{timestamp}{method}{request_path}'
@@ -75,7 +76,7 @@ class OkxClientBase(ErrorProcessorMixin):
                 self._process_error_response(exception, url=url, inst_id=query['instId'])
         return parsed_content
 
-    def parse_response(self, response) -> t.Dict:
+    def parse_response(self, response: t.Type[requests.Response]) -> t.Dict:
         try:
             loaded = json.loads(response.content)
         except TypeError:
@@ -83,5 +84,5 @@ class OkxClientBase(ErrorProcessorMixin):
             raise custom_exceptions.JSONParseError()
         return loaded
 
-    def load_data(self, response: t.Dict[str, t.Any], model: Schema, many: bool = False):
+    def load_data(self, response: t.Dict[str, t.Any], model: t.Type[BaseModel], many: bool = False):
         return model.load(data=response, many=many)
