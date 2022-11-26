@@ -7,19 +7,20 @@ import typing as t
 
 import requests
 from marshmallow import Schema
-
-from src.logger.logger_conf import get_logger
+from src.api_wrappers.exceptions.process_error_responses import ErrorProcessorMixin
 from src.api_wrappers.base.requests_utilities import SetupAPIKwargs
 from src.api_wrappers.utils import custom_exceptions
+from src.logger.logger_conf import get_logger
 from src.utilities.time import get_timestamp
 
 EXCEPTION_CODES: t.Final = {
     '51001': custom_exceptions.InstrumentDoesNotExistError,
     '51015': custom_exceptions.InstrumentDoesNotMatchError,
+    '50001': custom_exceptions.ServiceTemporarilyUnavailableError,
 }
 
 
-class OkxClientBase:
+class OkxClientBase(ErrorProcessorMixin):
     """
     Credentials to OKX API `trade_bot`
     """
@@ -71,7 +72,7 @@ class OkxClientBase:
         else:
             parsed_content = self.parse_response(response)
             if exception := EXCEPTION_CODES.get(parsed_content['code']):
-                raise exception(url=url, inst_id=query['instId'])
+                self._process_error_response(exception, url=url, inst_id=query['instId'])
         return parsed_content
 
     def parse_response(self, response) -> t.Dict:

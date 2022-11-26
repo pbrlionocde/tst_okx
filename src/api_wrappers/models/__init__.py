@@ -14,7 +14,6 @@ https://marshmallow.readthedocs.io/en/stable/
 from typing import Final, Type
 
 import marshmallow
-from marshmallow_dataclass import class_schema
 
 BASE_PATH: Final = 'src.api_wrappers.models.'
 
@@ -31,7 +30,7 @@ class InitializeModels:
             assert self.module, 'You must specify a module when __init__ or __call__ method is called'  # noqa: S101
             module = self.module
         model_class = __import__(f'{BASE_PATH}{module}', fromlist=[model_name])
-        return class_schema(getattr(model_class, model_name))()
+        return getattr(model_class, model_name)
 
 
 __all__ = [
