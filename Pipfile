@@ -7,6 +7,8 @@ name = "pypi"
 requests = "*"
 marshmallow-dataclass = "*"
 tradingview-ta = "*"
+celery = "*"
+
 
 [dev-packages]
 isort = "*"
@@ -20,7 +22,6 @@ flake8-bandit = "*"
 flake8-eradicate = "*"
 wemake-python-styleguide = "*"
 bandit = "*"
-celery = "*"
 
 [requires]
-python_version = "^3.8"
+python_version = "3.8"
