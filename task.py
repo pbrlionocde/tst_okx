@@ -8,7 +8,8 @@ In oreder to run celery scheduler service you need:
 * celery -A task beat --loglevel=info *
 """
 
-CLOUD_URL = 'amqps://nmgjrsmh:cd4OL1QoOp-2i0k56jBelkyGlP-ghWu3@sparrow.rmq.cloudamqp.com/nmgjrsmh'
+# CLOUD_URL = 'amqps://nmgjrsmh:cd4OL1QoOp-2i0k56jBelkyGlP-ghWu3@sparrow.rmq.cloudamqp.com/nmgjrsmh'
+CLOUD_URL = 'amqp://localhost'
 app = Celery('tasks', broker=CLOUD_URL)
 
 
