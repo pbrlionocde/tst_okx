@@ -26,3 +26,14 @@ class InstrumentDoesNotMatchError(Exception):
 
     def __str__(self) -> str:
         return f'{self.url} -> {self.message}: {self.inst_id}'
+
+
+class ServiceTemporarilyUnavailableError(Exception):
+    def __init__(self, url, inst_id: str):
+        self.url = url
+        self.inst_id = inst_id
+        self.message = 'Service temporarily unavailable.'
+        super().__init__(self.message)
+
+    def __str__(self) -> str:
+        return f'{self.url} -> {self.message}'

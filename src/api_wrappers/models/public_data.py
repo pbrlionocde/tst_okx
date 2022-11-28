@@ -1,10 +1,13 @@
-from dataclasses import dataclass, field
+from dataclasses import field
 
-from api_wrappers.models.common.metadata import Metadata
+from marshmallow_dataclass import dataclass
+
+from src.api_wrappers.models.base.base_model import BaseModel
+from src.api_wrappers.models.common.metadata import Metadata
 
 
 @dataclass
-class PublicDataInstrument:
+class PublicDataInstrument(BaseModel):
     alias: str
     base_ccy: str = field(metadata=Metadata(data_key='baseCcy',))
     category: str

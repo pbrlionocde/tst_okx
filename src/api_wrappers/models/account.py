@@ -1,12 +1,15 @@
-from dataclasses import dataclass, field
+from dataclasses import field
 from typing import List
 
-from api_wrappers.models.common.metadata import Metadata
+from marshmallow_dataclass import dataclass
+
+from src.api_wrappers.models.base.base_model import BaseModel
+from src.api_wrappers.models.common.metadata import Metadata
 
 
 # Balance
 @dataclass
-class BalanceDataDetails:
+class BalanceDataDetails(BaseModel):
     avail_bal: str = field(metadata=Metadata(data_key='availBal'))
     avail_eq: str = field(metadata=Metadata(data_key='availEq'))
     cash_bal: str = field(metadata=Metadata(data_key='cashBal'))
@@ -35,7 +38,7 @@ class BalanceDataDetails:
 
 
 @dataclass
-class BalanceData:
+class BalanceData(BaseModel):
     adj_eq: str = field(metadata=Metadata(data_key='adjEq'))
     imr: str
     iso_eq: str = field(metadata=Metadata(data_key='isoEq'))
@@ -49,7 +52,7 @@ class BalanceData:
 
 
 @dataclass
-class AccountBalance:
+class AccountBalance(BaseModel):
     code: str
     msg: str
     data: List[BalanceData]  # noqa: WPS120 # real item name

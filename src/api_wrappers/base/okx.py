@@ -7,32 +7,31 @@ import typing as t
 
 import requests
 from marshmallow import Schema
-
-from api_wrappers.base.requests_utilities import SetupAPIKwargs
-from api_wrappers.utils import custom_exceptions
-from logger.logger_conf import get_logger
-from utilities.time import get_timestamp
+from src.api_wrappers.exceptions.process_error_responses import ErrorProcessorMixin
+from src.api_wrappers.base.requests_utilities import SetupAPIKwargs
+from src.api_wrappers.utils import custom_exceptions
+from src.logger.logger_conf import get_logger
+from src.utilities.time import get_timestamp
 
 EXCEPTION_CODES: t.Final = {
     '51001': custom_exceptions.InstrumentDoesNotExistError,
     '51015': custom_exceptions.InstrumentDoesNotMatchError,
+    '50001': custom_exceptions.ServiceTemporarilyUnavailableError,
 }
 
 
-class OkxClientBase(SetupAPIKwargs):
+class OkxClientBase(ErrorProcessorMixin):
     """
     Credentials to OKX API `trade_bot`
     """
-
+    _demo_mode: bool  # Set through DEMO_MODE env variable to work in the demo network
     _rest_domain = 'https://www.okx.com'
-    _demo_header = {'x-simulated-trading': '1'}
     logger = get_logger()
 
     def __init__(self, *args, **kwargs):
         self.__access_key = os.environ['API_KEY']
         self.__api_passphrase = os.environ['API_PASSPHRASE']
         self.__api_secret = os.environ['API_SECRET_KEY']
-        super().__init__(self._rest_domain)
 
     def __get_signature(self, timestamp: str, method: str, request_path: str):
         msg = f'{timestamp}{method}{request_path}'
@@ -57,8 +56,9 @@ class OkxClientBase(SetupAPIKwargs):
         headers: t.Dict[str, str] = dict(),   # noqa: C408, B006
         query: t.Dict[str, str] = dict(),   # noqa: C408, B006
     ):
+        request_arguments = SetupAPIKwargs(self._rest_domain, self._get_private_request_headers, demo=self._demo_mode)
         try:
-            response = requests.request(**self.get_request_kwargs(
+            response = requests.request(**request_arguments.get_request_kwargs(
                 url=url,
                 method=method,
                 authorization=authorization,
@@ -72,7 +72,7 @@ class OkxClientBase(SetupAPIKwargs):
         else:
             parsed_content = self.parse_response(response)
             if exception := EXCEPTION_CODES.get(parsed_content['code']):
-                raise exception(url=url, inst_id=query['instId'])
+                self._process_error_response(exception, url=url, inst_id=query['instId'])
         return parsed_content
 
     def parse_response(self, response) -> t.Dict:
