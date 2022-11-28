@@ -20,3 +20,25 @@ documentation [Pipenv](https://pipenv.pypa.io/en/latest/).
 `API_PASSPHRASE` - you must specify the API_PASSPHRASE from OKX client.
 
 To use demo bot mode you must set `DEMO_MODE` to 1
+
+
+# Start Celery Worker
+
+If you don't have a docker -> <a href="https://docs.docker.com/engine/install/ubuntu/">install it</a>.
+
+In order to setup broker run:
+
+```
+  docker run -d -p 5672:5672 rabbitmq
+```
+
+To run celery scheduler service you need:
+
+```
+  celery -A task worker --loglevel=info
+```
+
+```
+  celery -A task beat --loglevel=info
+```
+One command per terminal!
